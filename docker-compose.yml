@@ -57,6 +57,26 @@ services:
       - cbioportal_mongo_data:/data/db
     networks:
       - cbio-net
+  cbioportal-galaxy-connector:
+    restart: unless-stopped
+    image: ${DOCKER_IMAGE_CBIOPORTAL_GALAXY_CONNECTOR}
+    container_name: cbioportal-galaxy-connector-container
+    environment:
+      GALAXY_URL: http://galaxy-container:8081
+    ports:
+      - "3001:3001"
+    networks:
+      - cbio-net
+  galaxy:
+    restart: unless-stopped
+    image: ${DOCKER_IMAGE_GALAXY}
+    container_name: galaxy-container
+    ports:
+      - "8081:8081"
+    networks:
+      - cbio-net
+
+
 
 networks:
   cbio-net: 
