@@ -4,3 +4,5 @@ data/*
 study/*
 config/portal.properties
 !*.sh
+docker_tar/
+.idea/
