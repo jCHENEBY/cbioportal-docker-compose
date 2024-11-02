@@ -65,8 +65,13 @@ services:
     container_name: cbioportal-galaxy-connector-container
     environment:
       GALAXY_URL: http://galaxy-container:8081
+      CBIOPORTAL_URL: http://cbioportal-container:8080
+      CBIOPORTAL_CACHE_API_KEY: fd15f1ae-66f2-4b8a-8d54-fb899b03557e
     ports:
       - "3001:3001"
+    volumes:
+      - ./study:/study/
+      - ./config/application.properties:/application.properties:ro
     networks:
       - cbio-net
   galaxy:
