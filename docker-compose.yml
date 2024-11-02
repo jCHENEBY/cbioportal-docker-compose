@@ -16,6 +16,7 @@ services:
     depends_on:
      - cbioportal-database
      - cbioportal-session
+     - redis
     networks:
      - cbio-net
     # TODO: servlet-api should be excluded from deps in mvn, the removal below is just a quick fix
@@ -78,6 +79,15 @@ services:
       - galaxy_data:/database
     networks:
       - cbio-net
+  redis:
+    restart: unless-stopped
+    image: ${DOCKER_IMAGE_REDIS}
+    container_name: redis-container
+    volumes:
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+        - cbio-net
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
 
 
 
