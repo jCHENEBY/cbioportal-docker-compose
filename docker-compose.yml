@@ -67,23 +67,34 @@ services:
       GALAXY_URL: http://galaxy-container:8081
       CBIOPORTAL_URL: http://cbioportal-container:8080
       CBIOPORTAL_CACHE_API_KEY: fd15f1ae-66f2-4b8a-8d54-fb899b03557e
+#      STUDY_DIRECTORY: /study
     ports:
       - "3001:3001"
     volumes:
       - ./study:/study/
       - ./config/application.properties:/application.properties:ro
+      - image_data:/uploaded_images
     networks:
       - cbio-net
   galaxy:
     restart: unless-stopped
     image: ${DOCKER_IMAGE_GALAXY}
     container_name: galaxy-container
+    environment:
+      EXPORT_TIMELINE_ENDPOINT: http://cbioportal-galaxy-connector-container:3001/export-timeline-to-cbioportal
+      UPLOAD_IMAGE_ENDPOINT: http://cbioportal-galaxy-connector:3001/upload-image/
+      CBIOPORTAL_LOAD_RESOURCE_ENDPOINT: http://cbioportal-galaxy-connector:3001/export-ressource-to-cbioportal
+      IMAGE_BASE_URL: http://localhost:3001
     ports:
       - "8081:8081"
     volumes:
       - galaxy_data:/database
+      - ./entrypoint.sh:/entrypoint.sh   # Mount the entrypoint script
     networks:
       - cbio-net
+    entrypoint: ["/entrypoint.sh"]
+    command: [ "/bin/sh", "-c", "galaxy" ]
+
   redis:
     restart: unless-stopped
     image: ${DOCKER_IMAGE_REDIS}
@@ -103,3 +114,4 @@ volumes:
   cbioportal_mysql_data:
   cbioportal_mongo_data:
   galaxy_data:
+  image_data:
