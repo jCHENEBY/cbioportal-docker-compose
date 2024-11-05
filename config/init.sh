@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-VERSION=$(grep DOCKER_IMAGE_CBIOPORTAL ../.env | cut -d '=' -f 2-)
+VERSION=cbioportal/cbioportal:latest
 
 docker run --rm -it $VERSION cat /cbioportal-webapp/application.properties |
     sed 's|spring.datasource.password=.*|spring.datasource.password=somepassword|' | \

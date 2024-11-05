@@ -89,7 +89,6 @@ services:
       - "8081:8081"
     volumes:
       - galaxy_data:/database
-      - ./entrypoint.sh:/entrypoint.sh   # Mount the entrypoint script
     networks:
       - cbio-net
     entrypoint: ["/entrypoint.sh"]
